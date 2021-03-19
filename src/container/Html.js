@@ -16,9 +16,9 @@ let [currentQuestion, setCurrentQuestion] = useState(0);
 
 
     return (
-        <div>
-            <h1>HTMLQUIZ</h1>
-<Link to="/PythonQu" > <button onClick={()=>props.HTMLQUIZ()} >START QUIZ</button></Link>
+        <div className="App">
+            <h1>HTML & CSS</h1>
+<Link to="/HtmlQu" > <button onClick={()=>props.HTMLQUIZ()} >START QUIZ</button></Link>
 
 
 

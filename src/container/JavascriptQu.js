@@ -8,11 +8,12 @@ import {JAVASCRIPT} from "../store/Action/Action"
 function JavascriptQu(props) {
     const history = useHistory();
     const [ quiz ,setquiz ] = (props.Javascript)
-
     let [currentQuestion, setCurrentQuestion] = useState(0);
     const [Loading, setloading] = useState(true)
     const [optionChosen, setOptionChosen] = useState("");
     let [score, setScore] = useState(0);
+    const [language, setlanguage] = useState("Python");
+
 
 
 
@@ -27,28 +28,19 @@ function JavascriptQu(props) {
 
     const nextQuestion = () => {
         if (optionChosen !== "") {
-            console.log(quiz[currentQuestion].answer,optionChosen)
-            
+
             if (quiz[currentQuestion].answer == optionChosen) {
                 setScore(++score);
-                alert(score)
                 setCurrentQuestion(currentQuestion + 1);
+                setOptionChosen("")
 
 
-                // console.log(score)
             } else if (quiz[currentQuestion].answer !== optionChosen) {
-                alert(score)
 
                 setCurrentQuestion(currentQuestion + 1);
+                setOptionChosen("");
             }
-            else if (optionChosen !== "") {
-                setCurrentQuestion(currentQuestion);
-            }
-            /* if(Question[currentQuestion ] > 0) {
-                if(optionChosen !== "") {
-                    alert("choose the option")
-                }
-            }  */
+         
         } else {
             alert("choose the option")
 
@@ -59,14 +51,29 @@ function JavascriptQu(props) {
     };
 
 
+    const Result = {
+        score,
+        language
+    }
+
+
+
     const finishQuiz = () => {
         if (quiz[currentQuestion].answer == optionChosen) {
             setScore(++score);
             alert(score)
+            localStorage.setItem("results", JSON.stringify(Result))
+            console.log("chl rhaa")
             history.replace('/Results')
-            localStorage.setItem("userscore", score)
+        } else if (quiz[currentQuestion].answer !== optionChosen) {
+            setScore(score);
+            alert(score)
+            localStorage.setItem("results", JSON.stringify(Result))
+            console.log("chl rhaa")
+            history.replace('/Results')
         }
     };
+
 
 
 
@@ -74,27 +81,37 @@ function JavascriptQu(props) {
              return <div><h1>loading</h1></div>
          }
     return (
-        <div>
-            <div style={{marginBottom:50}}>
-
+        <div>   
+            <div style={{marginBottom:50,textAlign:"center"}}>
             <h1 style={{borderBottom:"2px solid"}}>JAVASCRIPT QUIZ</h1>
             </div>
-            <h2 > Q{currentQuestion} : {quiz[currentQuestion].question} </h2> 
-           <button style={{width:450 , backgroundColor:"#1a1aff",marginTop:10 ,color:"white"}}>  <h4 onClick={() => { chooseOption("option1"); }}>{quiz[currentQuestion].option1} </h4> </button> <br/>
-           <button style={{width:450 ,backgroundColor:"#1a1aff",marginTop:10 ,color:"white"}}>  <h4 onClick={() => { chooseOption("option2"); }}>{quiz[currentQuestion].option2} </h4> </button> <br/>
-           <button style={{width:450 ,backgroundColor:"#1a1aff",marginTop:10 ,color:"white"}}>  <h4 onClick={() => { chooseOption("option3"); }}>{quiz[currentQuestion].option4} </h4> </button> <br/>
-           <button style={{width:450 ,backgroundColor:"#1a1aff",marginTop:10 ,color:"white"}}>  <h4 onClick={() => { chooseOption("option4"); }}>{quiz[currentQuestion].option3} </h4> </button> <br/> 
-         <div>
+
+          <div style={{width:"70%",margin:"auto",backgroundColor:"black",padding:20}}>
+
+          <div style={{color:"white",textAlign:"center"}}>
+            
+            <h2 > Q{currentQuestion + 1} : {quiz[currentQuestion].question} </h2> 
+
+          </div>
+            <button style={{ border:"none" ,width:"100%" , backgroundColor:"black" , marginTop:10 ,color:"white"}}>  <h3 style={{width: '100%'}} onClick={() => { chooseOption("option1"); }}>A )   {quiz[currentQuestion].option1} </h3> </button> <br/>
+           <button style={{ border:"none" ,width:"100%" , backgroundColor:"black" , marginTop:10 ,color:"white"}}>  <h3 style={{width: '100%'}} onClick={() => { chooseOption("option2"); }}> B )   {quiz[currentQuestion].option2} </h3> </button> <br/>
+           <button style={{border:"none" ,width:"100%" , backgroundColor:"black" , marginTop:10 ,color:"white"}}>  <h3 style={{width: '100%'}} onClick={() => { chooseOption("option3"); }}> C )   {quiz[currentQuestion].option4} </h3> </button> <br/>
+           <button style={{border:"none" ,width:"100%" , backgroundColor:"black" , marginTop:10 ,color:"white"}}>  <h3 style={{width: '100%'}} onClick={() => { chooseOption("option4"); }}> D )   {quiz[currentQuestion].option3} </h3> </button> <br/> 
+       
+        <div style={{textAlign:"center"}}>
+
          {currentQuestion == quiz.length - 1 ? (
-                        <button onClick={finishQuiz} id="nextQuestion"  style={{width:300,backgroundColor:"yellow",height:40,borderRadius:20,marginTop:30}}>
+                        <button onClick={finishQuiz} id="nextQuestion"  style={{width:"80%",backgroundColor:"white",height:40,borderRadius:20,marginTop:30,textAlign:"center"}}>
                             Finish Quiz
                         </button>
                     ) : (
-                        <button onClick={nextQuestion} id="nextQuestion"  style={{width:300,backgroundColor:"yellow",height:40,borderRadius:20,marginTop:30}}>
+                        <button onClick={nextQuestion} id="nextQuestion"  style={{width:"80%",backgroundColor:"white",height:40,borderRadius:20,marginTop:30,textAlign:"center"}}>
                             Next Question
                         </button>
                     )}  
          </div>
+         </div>
+
         </div>
 
     )
