@@ -46,7 +46,16 @@ const PHYTHON =  () => {
     }
 }
 
-
+const ForAllQUIZ =  (courseName) => {
+    return (dispatch) => {
+         let data =  firebase.database().ref(courseName)
+        data.on("value", datasnap => {
+            console.log(datasnap.val())
+        let quiz =  (Object.values(datasnap.val())  )
+        dispatch({ type: courseName, payload: quiz })
+        })
+    }
+}
 
 
 

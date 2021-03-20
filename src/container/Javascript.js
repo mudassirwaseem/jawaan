@@ -7,7 +7,6 @@ import {
 
 
 function Javascript(props) {
-let [currentQuestion, setCurrentQuestion] = useState(0);
 
    
     
@@ -15,9 +14,8 @@ let [currentQuestion, setCurrentQuestion] = useState(0);
 
 
     return (
-        <div>
-            <h1>js</h1>
-            <h1></h1>
+        <div className="App">
+            <h1>Javascript</h1>
 <Link to="/JavascriptQu" > <button onClick={()=>props.JAVASCRIPT()} >START QUIZ</button></Link>
 
 
