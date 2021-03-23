@@ -3,7 +3,8 @@ const INITIAL_STATE = {
     Quizs: [],
     Python: [],
     Javascript: [],
-    HtmlCss: []
+    HtmlCss: [],
+    All:[]
 }
 
 
@@ -31,6 +32,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 Quizs: [action.payload]
             })
+            case "all":
+                return ({
+                    ...state,
+                    All: [action.payload]
+                })
         default:
             return state
 
