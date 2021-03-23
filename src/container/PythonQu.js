@@ -44,6 +44,7 @@ function PythonQu(props) {
                     sec: state.sec == 0 ? 59 : state.sec - 1,
                 };
             });
+
         }, 1000);
     };
 
@@ -54,13 +55,14 @@ function PythonQu(props) {
     const nextQuestion = () => {
         if (optionChosen !== "") {
             if (quiz[currentQuestion].answer == optionChosen) {
-                console.log(quiz[currentQuestion].question)
-                console.log(quiz[currentQuestion].answer)
-                console.log(optionChosen)
+                // console.log(quiz[currentQuestion].question)
+                // console.log(quiz[currentQuestion].answer)
+                // console.log(optionChosen)
                 setScore(++score);
 
                 setCurrentQuestion(currentQuestion + 1);
                 setOptionChosen("")
+                
             } else if (quiz[currentQuestion].answer !== optionChosen) {
 
 
@@ -89,26 +91,34 @@ function PythonQu(props) {
 
     };
 
-    const PreQuestion = () => {
-        if (currentQuestion === 0) {
-            setCurrentQuestion(currentQuestion);
-        } else {
-            setCurrentQuestion(currentQuestion - 1);
-        }
-    };
-
+    // const PreQuestion = () => {
+    //     if (currentQuestion === 0) {
+    //         setCurrentQuestion(currentQuestion);
+    //     } else {
+    //         setCurrentQuestion(currentQuestion - 1);
+    //     }
+    // };
 
     const finishQuiz = () => {
         if (quiz[currentQuestion].answer == optionChosen) {
             setScore(++score);
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({score})
+            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
             alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
             // console.log("chl rhaa")
             history.replace('/Results')
         } else if (quiz[currentQuestion].answer !== optionChosen) {
             setScore(score);
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({score})
+
+            let data = {
+                Question: quiz[currentQuestion].question,
+                CrAnswer: quiz[currentQuestion].answer,
+                AnsChoosen: optionChosen
+            }
+
+            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
+            firebase.database().ref(`UserData1/Uid/${language}`).child("Wrong Answer").push(data)
+
             alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
             // console.log("chl rhaa")
@@ -141,50 +151,50 @@ function PythonQu(props) {
                     <h2 > Q{currentQuestion + 1} : {quiz[currentQuestion].question} </h2>
 
                 </div>
-                <button  onClick={() => { chooseOption(quiz[currentQuestion].option1); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }}> A )    {quiz[currentQuestion].option1} </h3> </button> <br />
-                <button  onClick={() => { chooseOption(quiz[currentQuestion].option2); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > B )   {quiz[currentQuestion].option2} </h3> </button> <br />
-                <button  onClick={() => { chooseOption(quiz[currentQuestion].option3); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > C )   {quiz[currentQuestion].option3} </h3> </button> <br />
-                <button  onClick={() => { chooseOption(quiz[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {quiz[currentQuestion].option4} </h3> </button> <br />
+                <button onClick={() => { chooseOption(quiz[currentQuestion].option1); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }}> A )    {quiz[currentQuestion].option1} </h3> </button> <br />
+                <button onClick={() => { chooseOption(quiz[currentQuestion].option2); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > B )   {quiz[currentQuestion].option2} </h3> </button> <br />
+                <button onClick={() => { chooseOption(quiz[currentQuestion].option3); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > C )   {quiz[currentQuestion].option3} </h3> </button> <br />
+                <button onClick={() => { chooseOption(quiz[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {quiz[currentQuestion].option4} </h3> </button> <br />
 
                 <div style={{ textAlign: "center" }}>
 
 
                     {currentQuestion == quiz.length - 1 ? (
                         <>
-                            <button onClick={finishQuiz} id="nextQuestion" style={{ width: "40%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                            <button onClick={finishQuiz} id="nextQuestion" style={{ width: "50%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                 Finish Quiz
                         </button>
-                            <button onClick={PreQuestion} id="nextQuestion" style={{ width: "40%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                            {/* <button onClick={PreQuestion} id="nextQuestion" style={{ width: "40%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                 Previous
-                     </button>
+                     </button> */}
                         </>
                     ) : (
                         <div>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <button onClick={PreQuestion} id="nextQuestion" style={{ width: "33%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                            <div style={{ display: "flex", justifyContent: "space-around" }}>
+                                {/* <button onClick={PreQuestion} id="nextQuestion" style={{ width: "33%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Previous
-                        </button>
-                                <button onClick={nextQuestion} id="nextQuestion" style={{ width: "33%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                        </button> */}
+                                <button onClick={nextQuestion} id="nextQuestion" style={{ width: "50%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Next Question
                         </button>
-                                <button onClick={Submit} id="nextQuestion" style={{ width: "33%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                                {/* <button onClick={Submit} id="nextQuestion" style={{ width: "33%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Submit
-                        </button>
+                        </button> */}
                             </div>
                         </div>
                     )}
                     <div style={{ display: "flex", justifyContent: "space-around", marginTop: 20 }}>
                         {quiz.map((v, i) => {
                             return (
-                                <div>
-                                    
-                                    {currentQuestion == i ? <h1 style={{backgroundColor:'#1aff1a',width:50,borderRadius:"50%"}}>{i+1}</h1>:<h1 style={{backgroundColor:'white',width:50 ,borderRadius:"50%"}}>{i+1}</h1>}
-                                    
+                                <div key={i}>
+
+                                    {currentQuestion == i ? <h1 style={{ backgroundColor: '#1aff1a', width: 50, borderRadius: "50%" }}>{i + 1}</h1> : <h1 style={{ backgroundColor: 'white', width: 50, borderRadius: "50%" }}>{i + 1}</h1>}
+
                                     {/* <p style={{color:"white"}}>{currentQuestion.length}</p> */}
+                                    {/* { console.log(currentQuestion + 1) } */}
                                 </div>
-                                
+
                             )
-                            {console.log(currentQuestion + 1)}
                         })}
                     </div>
                 </div>

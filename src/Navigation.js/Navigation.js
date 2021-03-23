@@ -7,6 +7,10 @@ import JavascriptQu from "../container/JavascriptQu"
 import Results from "../container/Results"
 import PythonQu from "../container/PythonQu"
 import HtmlQu from "../container/HtmlQu"
+import Admin from "../container/Admin"
+import Cs from "../container/Cs"
+
+import Counter from "../container/Counter"
 
 
 import {
@@ -29,7 +33,13 @@ function Navigation() {
           <Route exact path='/Results' component={Results}/>
           <Route exact path='/PythonQu' component={PythonQu}/>
           <Route exact path='/HtmlQu' component={HtmlQu}/>
-          
+          <Route exact path='/Counter' component={Counter}/>
+          <Route exact path='/Admin' component={Admin}/>
+          <Route exact path='/Cs' component={Cs}/>
+          {/* <Route exact path='/' component={SetData} />
+          <Route exact path='/data' component={Select} /> */}
+
+
         </Switch>
        
       </Router>
