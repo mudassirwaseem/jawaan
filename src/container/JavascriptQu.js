@@ -14,21 +14,52 @@ function JavascriptQu(props) {
     const [optionChosen, setOptionChosen] = useState("");
     let [score, setScore] = useState(0);
     const [language, setlanguage] = useState("Javascript");
+    const [UserId, setUserId] = useState("");
+    const [Username, setUsername] = useState("");
+    const [Quizlength, setQuizlength] = useState("");
 
     const [timer, setTimer] = useState({
         min: 4,
         sec: 59,
     });
+    // console.log(Quizlength)
 
+    // if(quiz){
+    //     setQuizlength(quiz.length)
+    // }
+
+   
+
+
+    
 
     useEffect(() => {
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+              // User is signed in, see docs for a list of available properties
+              // https://firebase.google.com/docs/reference/js/firebase.User
+              var uid = user.uid;
+              var user = user.displayName
+              setUserId(uid)
+              setUsername(user)
+              console.log(uid)
+              console.log(user)
+              // ...
+            } else {
+              // User is signed out
+              // ...
+            }
+          });
+
         click()
     }, [])
 
 
     const Result = {
         score,
-        language
+        language,
+        Username
     }
 
     if (timer.min === 0 && timer.sec === 0) {
@@ -73,7 +104,8 @@ function JavascriptQu(props) {
 
                 console.log(data)
 
-                firebase.database().ref(`UserData1/Uid/${language}`).child("Wrong Answer").push(data)
+                // firebase.database().ref(`UserData1/UserId/${language}`).child("Wrong Answer").push(data)
+                firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
 
                 setCurrentQuestion(currentQuestion + 1);
                 setOptionChosen("");
@@ -101,7 +133,7 @@ function JavascriptQu(props) {
     const finishQuiz = () => {
         if (quiz[currentQuestion].answer == optionChosen) {
             setScore(++score);
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
+            firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
             alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
             // console.log("chl rhaa")
@@ -115,8 +147,8 @@ function JavascriptQu(props) {
                 AnsChoosen: optionChosen
             }
 
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
-            firebase.database().ref(`UserData1/Uid/${language}`).child("Wrong Answer").push(data)
+            firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
+            firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
 
             alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
@@ -134,12 +166,16 @@ function JavascriptQu(props) {
     if (!quiz) {
         return <div><h1>loading</h1></div>
     }
+
+   
     return (
+        
         <div>
+            
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>Javascript Quiz</h1>
             </div>
-
+         
             <div style={{ width: "70%", margin: "auto", backgroundColor: "black", padding: 20 }}>
                 <div style={{ color: "white" }}>
                     {timer.min < 10 ? "0" + timer.min : timer.min}:
@@ -176,9 +212,9 @@ function JavascriptQu(props) {
                                 <button onClick={nextQuestion} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Next Question
                         </button>
-                                <button onClick={Submit} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                                {/* <button onClick={Submit} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Submit
-                        </button>
+                        </button> */}
                             </div>
                         </div>
                     )}

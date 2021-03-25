@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import firebase from "../config/Firebase"
 
 function Admin() {
-
     const [question, setquestion] = useState("")
     const [option1, setoption1] = useState("")
     const [option2, setoption2] = useState("")
@@ -13,9 +12,11 @@ function Admin() {
     const [emptyCourse, setEmptyCourse] = useState(false)
     const [optionSelected, setOptionSelected] = useState("unselected")
 
+
+
     const Savedata = () => {
         let data = { question, option1, option2, option3, option4, answer, optionSelected }
-        firebase.database().ref(` AllQuiz/${course}`).push(data)
+        firebase.database().ref(`AllQuiz/${course}`).push(data)
         setquestion("");
         setoption1("")
         setoption2("")

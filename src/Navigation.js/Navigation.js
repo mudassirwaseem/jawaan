@@ -9,6 +9,7 @@ import PythonQu from "../container/PythonQu"
 import HtmlQu from "../container/HtmlQu"
 import Admin from "../container/Admin"
 import Cs from "../container/Cs"
+import Main from "../container/Main"
 
 import Counter from "../container/Counter"
 
@@ -24,8 +25,8 @@ function Navigation() {
     return (
         <Router>
         <Switch>
+
           <Route exact path='/' component={Quiz} />
-          
           <Route exact path='/Javascript' component={Javascript}/>
           <Route exact path='/Python' component={Python}/>
           <Route exact path='/Html' component={Html}/>
@@ -36,6 +37,7 @@ function Navigation() {
           <Route exact path='/Counter' component={Counter}/>
           <Route exact path='/Admin' component={Admin}/>
           <Route exact path='/Cs' component={Cs}/>
+          <Route exact path='/Main' component={Main}/>
           {/* <Route exact path='/' component={SetData} />
           <Route exact path='/data' component={Select} /> */}
 

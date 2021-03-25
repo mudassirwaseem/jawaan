@@ -3,34 +3,63 @@ import { connect } from "react-redux"
 import { useHistory } from 'react-router-dom'
 import firebase from "../config/Firebase"
 import { HTMLQUIZ } from "../store/Action/Action"
+import { Spinner } from "react-bootstrap";
+
 
 
 function HtmlQu(props) {
     const history = useHistory();
     const [quiz, setquiz] = (props.HtmlCss)
-    let [currentQuestion, setCurrentQuestion] = useState(0);
+    let   [currentQuestion, setCurrentQuestion] = useState(0);
     const [Loading, setloading] = useState(true)
     const [optionChosen, setOptionChosen] = useState("");
-    let [score, setScore] = useState(0);
+    let   [score, setScore] = useState(0);
     const [language, setlanguage] = useState("HtmlCss");
+    const [UserId, setUserId] = useState("");
+    const [Username, setUsername] = useState("");
+    const [QuizLength, setQuizLength] = useState("");
 
     const [timer, setTimer] = useState({
         min: 4,
         sec: 59,
     });
-
-
-
-
+ 
+    // let len = quiz.length
+    // setQuizLength(len)
+    
     useEffect(() => {
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+              // User is signed in, see docs for a list of available properties
+              // https://firebase.google.com/docs/reference/js/firebase.User
+              var uid = user.uid;
+              var user = user.displayName
+              setUserId(uid)
+              setUsername(user)
+              console.log(uid)
+              console.log(user)
+              // ...
+            } else {
+              // User is signed out
+              // ...
+            }
+            
+        });
+        
         click()
     }, [])
+
+
+    // console.log(QuizLength)
+
 
 
 
     const Result = {
         score,
         language,
+        Username
 
         
     }
@@ -59,9 +88,7 @@ function HtmlQu(props) {
     const nextQuestion = () => {
         if (optionChosen !== "") {
             if (quiz[currentQuestion].answer == optionChosen) {
-                console.log(quiz[currentQuestion].question)
-                console.log(quiz[currentQuestion].answer)
-                console.log(optionChosen)
+               
                 setScore(++score);
 
                 setCurrentQuestion(currentQuestion + 1);
@@ -77,7 +104,7 @@ function HtmlQu(props) {
 
                 console.log(data)
 
-                firebase.database().ref(`UserData1/Uid/${language}`).child("Wrong Answer").push(data)
+                firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
 
                 setCurrentQuestion(currentQuestion + 1);
                 setOptionChosen("");
@@ -104,8 +131,8 @@ function HtmlQu(props) {
 
     const finishQuiz = () => {
         if (quiz[currentQuestion].answer == optionChosen) {
-            setScore(++score);
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
+            setScore(++score); 
+            firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
             alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
             // console.log("chl rhaa")
@@ -119,30 +146,48 @@ function HtmlQu(props) {
                 AnsChoosen: optionChosen
             }
 
-            firebase.database().ref(`UserData1/Uid/${language}/`).push({ score })
-            firebase.database().ref(`UserData1/Uid/${language}`).child("Wrong Answer").push(data)
-            alert(score)
+            firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
+            firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
+          alert(score)
             localStorage.setItem("results", JSON.stringify(Result))
             // console.log("chl rhaa")
             history.replace('/Results')
         }
     };
 
-    const length = (e) => {
-        console.log(e)
+   
 
+   
 
-    }
 
     if (!quiz) {
-        return <div><h1>loading</h1></div>
+
+        return <div > { <Spinner
+            role="status"
+            animation="border"
+            variant="secondary"
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              height: "100px",
+              width: "100px",
+            }}
+          >
+            <span className="sr-only">Loading...</span>
+          </Spinner>}</div>
     }
+
+    
+    // let len = quiz.length
+    // setQuizLength(len)
+
     return (
         <div>
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>Html Quiz</h1>
             </div>
-
+            
             <div style={{ width: "70%", margin: "auto", backgroundColor: "black", padding: 20 }}>
                 <div style={{ color: "white" }}>
                     {timer.min < 10 ? "0" + timer.min : timer.min}:
@@ -179,9 +224,7 @@ function HtmlQu(props) {
                                 <button onClick={nextQuestion} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
                                     Next Question
                         </button>
-                                <button onClick={Submit} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
-                                    Submit
-                        </button>
+                                
                             </div>
                         </div>
                     )}
@@ -189,7 +232,6 @@ function HtmlQu(props) {
                         {quiz.map((v, i) => {
                             return (
                                 <div key={i}>
-
                                     {currentQuestion == i ? <h1 style={{ backgroundColor: '#1aff1a', width: 50, borderRadius: "50%" }}>{i + 1}</h1> : <h1 style={{ backgroundColor: 'white', width: 50, borderRadius: "50%" }}>{i + 1}</h1>}
 
                                     {/* <p style={{color:"white"}}>{currentQuestion.length}</p> */}

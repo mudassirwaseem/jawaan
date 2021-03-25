@@ -46,16 +46,7 @@ const PHYTHON =  () => {
     }
 }
 
-const AllQuiz =  () => {
-    return (dispatch) => {
-         let data =  firebase.database().ref("AllQuiz")
-        data.on("value", datasnap => {
-            console.log(datasnap.val())
-        let quiz =  ( Object.values(datasnap.val()))
-        dispatch({ type: "PHYTHON", payload: quiz })
-        })
-    }
-}
+
 
 export {
     Firebase_data,
