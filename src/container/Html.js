@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { connect, useStore } from "react-redux"
 import { HTMLQUIZ } from "../store/Action/Action"
 
-
 import {
     Link
 } from "react-router-dom";
-
-
-
-
-
 
 function Html(props) {
     
@@ -29,4 +23,5 @@ const mapstatetoprops = (state) => ({
 const mapdispatchtoprops = (dispatch) => ({
     HTMLQUIZ: () => dispatch(HTMLQUIZ()),
 })
+
 export default connect(mapstatetoprops, mapdispatchtoprops)(Html)

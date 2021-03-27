@@ -10,15 +10,18 @@ function Admin() {
     const [option4, setoption4] = useState("")
     const [answer, setanswer] = useState("")
     const [course, setcourse] = useState("")
+    const [insitute, setinsitute] = useState("BMJ")
     const [emptyCourse, setEmptyCourse] = useState(false)
-    const [optionSelected, setOptionSelected] = useState("unselected")
+    // const [optionSelected, setOptionSelected] = useState("unselected")
 
 
 
     const Savedata = () => {
-        let data = { question, option1, option2, option3, option4, answer, optionSelected }
-        firebase.database().ref(`All Quiz/${course}/Questions`).push(data)
-        firebase.database().ref(`All Quiz/${course}/Visible`).set("OFF")
+        let data = { question, option1, option2, option3, option4, answer, insitute }
+        // firebase.database().ref(`All Quiz/${course}/Questions`).push(data)
+        firebase.database().ref(`${insitute}/All Quiz/${course}/Questions`).push(data)
+        // firebase.database().ref(`All Quiz/${course}/Visible`).set("OFF")
+        firebase.database().ref(`${insitute}/All Quiz/${course}/Visible`).set("OFF")
         setquestion("");
         setoption1("")
         setoption2("")
@@ -40,7 +43,14 @@ function Admin() {
         <div>
             <div style={{ textAlign: "center" }}>
 
-                
+                <div>
+                    
+                    <select onChange={(e) => setinsitute(e.target.value)} >
+                        <option value="BMJ">BMJ</option>
+                        <option value="SAYLANI">SAYLANI</option>
+                        <option value="ADAMJEE">ADAMJEE</option>
+                    </select>
+                </div>
                 <div>
          
                     {emptyCourse ? <input value={course} disabled placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} /> : <input value={course} placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} />}

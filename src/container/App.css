@@ -1,0 +1,67 @@
+
+.modal-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+  }
+  
+  .modal-bg > .modal {
+    overflow: auto;
+    position: relative;
+    background-color: white;
+    width: 60%;
+    height: 90%;
+    padding: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .modal-bg > .modal > form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-bg > .modal > form > input {
+    font-size: 16px;
+    margin-right: 10px;
+    text-align: center;
+    padding: 10px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #000;
+  }
+  
+  .modal-bg > .modal > form > button {
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 10px 25px;
+    cursor: pointer;
+    background-color: #007e87;
+  }
+  
+  .modal-bg > .modal > .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .bg-active {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }

@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import firebase from "../config/Firebase"
-
+import "./App.css";
 function Results(props) {
 
     const [data, setdata] = useState([])
     const [UserId, setUserId] = useState("");
+    const [Picture, setPicture] = useState("");
     const [Loading, setloading] = useState(true)
+
+    const [customClassName, setCustomClassName] = useState(false);
+
+    const openModal = () => {
+        setCustomClassName(true);
+    };
+
+    const closeModal = () => {
+        setCustomClassName(false);
+    };
+
 
     console.log(UserId)
     console.log(data.length)
@@ -26,16 +38,26 @@ function Results(props) {
                 let data = firebase.database().ref(`Students/${uid}/${resultsData.language}/Wrong Answer`)
                 data.on("value", datasnap => {
                     console.log(datasnap.val())
-                    setdata(Object.values(datasnap.val()) )
+                    setdata(Object.values(datasnap.val()))
                     setloading(false)
 
                 })
 
 
+                let data2 = firebase.database().ref(`Students/${uid}/PersonalData/profile`)
+                data2.on("value", datasnap => {
+                    console.log(datasnap.val())
+                    setPicture(datasnap.val())
+                    // setdata(Object.values(datasnap.val()))
+                    // setloading(false)
+
+                })
+
             } else {
                 // User is signed out
                 // ...
             }
+
 
         });
 
@@ -54,29 +76,40 @@ function Results(props) {
 
     return (
         <div className="App">
-            <div style={{border:"2px solid",width:"60%",textAlign:"center",margin:"auto",marginBottom:20}}>
-            <img style={{borderRadius:"50%"}} src="https://lh3.googleusercontent.com/a-/AOh14GjvnFyz4-gATrtd2A6d8CojYCeYQgQxiw1-dZi-qg=s96-c" alt=""/>
-            <h1>Name : {resultsData.Username}</h1>
-            <h1> Course : {resultsData.language}</h1>
-            <h1>Score :{resultsData.score}/10 </h1>
-            <h2>Percentage : {resultsData.score/10 * 100} %</h2>
-            
-            
-            <h2> Grade : {resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL":""}</h2>
+            <div style={{ border: "2px solid", width: "60%", textAlign: "center", margin: "auto", marginBottom: 20 }}>
+                <img style={{ borderRadius: "50%" }} src={Picture} alt="" />
+                <h1>Name : {resultsData.Username}</h1>
+                <h1> Course : {resultsData.language}</h1>
+                <h1>Score :{resultsData.score}/ {resultsData.length} </h1>
+                <h2>Percentage : {Math.floor(resultsData.score / resultsData.length * 100)} %</h2>
+
+
+                <h2> Grade : {resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""}</h2>
             </div>
-         
-            {data.map((v, i) => {
-    return (<div key={i} style={{ width: "60%", margin: "auto", border: "2px solid", padding: 20 }}>
-        <h2>Q - {v.Question}</h2>
-        <div><h4 style={{ backgroundColor: "green", color: "white", display: "flex", justifyContent: "space-around", height: 40, alignItems: "center" }}><span>Correct Answer : </span><span>{v.AnsChoosen}</span></h4></div>
-        <div><h4 style={{ backgroundColor: "red", color: "white", display: "flex", justifyContent: "space-around", height: 40, alignItems: "center" }}><span>You Choosen : </span><span>{v.CrAnswer}</span></h4></div>
-        {/* <div><h4 style={{backgroundColor:"red",color:"white"}}>You Choosen : {v.CrAnswer}</h4></div>  */}
-    </div>
 
-    )
-})}
+            {/* modal */}
+            <button onClick={openModal}>Open Modal</button>
+            <div className={`modal-bg ${customClassName ? "bg-active" : ""}`}>
+                <div className="modal">
 
-         
+                    {data.map((v, i) => {
+                        return (<div key={i} style={{ width: "60%", margin: "auto", border: "2px solid", padding: 20 }}>
+                            <h2>Q - {v.Question}</h2>
+                            <div><h4 style={{ backgroundColor: "green", color: "white", display: "flex", justifyContent: "space-around", height: 40, alignItems: "center" }}><span>Correct Answer : </span><span>{v.AnsChoosen}</span></h4></div>
+                            <div><h4 style={{ backgroundColor: "red", color: "white", display: "flex", justifyContent: "space-around", height: 40, alignItems: "center" }}><span>You Choosen : </span><span>{v.CrAnswer}</span></h4></div>
+                        </div>
+
+                        )
+                    })}
+                    <span className="modal-close" onClick={() => closeModal()}>
+                        X
+          </span>
+                </div>
+            </div>
+
+
+
+
         </div>
         //     const resultsData = JSON.parse(localStorage.getItem("results"))
         //     return (

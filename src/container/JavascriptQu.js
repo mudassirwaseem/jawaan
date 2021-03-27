@@ -22,35 +22,36 @@ function JavascriptQu(props) {
         min: 4,
         sec: 59,
     });
+
     // console.log(Quizlength)
 
     // if(quiz){
     //     setQuizlength(quiz.length)
     // }
 
-   
 
 
-    
+
+
 
     useEffect(() => {
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-              // User is signed in, see docs for a list of available properties
-              // https://firebase.google.com/docs/reference/js/firebase.User
-              var uid = user.uid;
-              var user = user.displayName
-              setUserId(uid)
-              setUsername(user)
-              console.log(uid)
-              console.log(user)
-              // ...
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                var uid = user.uid;
+                var user = user.displayName
+                setUserId(uid)
+                setUsername(user)
+                console.log(uid)
+                console.log(user)
+                // ...
             } else {
-              // User is signed out
-              // ...
+                // User is signed out
+                // ...
             }
-          });
+        });
 
         click()
     }, [])
@@ -75,7 +76,7 @@ function JavascriptQu(props) {
                     sec: state.sec == 0 ? 59 : state.sec - 1,
                 };
             });
-            
+
         }, 1000);
     };
 
@@ -167,15 +168,15 @@ function JavascriptQu(props) {
         return <div><h1>loading</h1></div>
     }
 
-   
+
     return (
-        
+
         <div>
-            
+
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>Javascript Quiz</h1>
             </div>
-         
+
             <div style={{ width: "70%", margin: "auto", backgroundColor: "black", padding: 20 }}>
                 <div style={{ color: "white" }}>
                     {timer.min < 10 ? "0" + timer.min : timer.min}:
