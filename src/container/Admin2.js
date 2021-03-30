@@ -19,10 +19,16 @@ function Admin() {
 
     const Savedata = () => {
         let data = { question, option1, option2, option3, option4, answer, insitute }
+        let data1 = { question, option1, option2, option3, option4, answer, insitute,Topic,course }
+        console.log(data1)
         // firebase.database().ref(`All Quiz/${course}/Questions`).push(data)
-        firebase.database().ref(`${insitute}/All Quiz/${course}/Questions`).push(data)
+
+        firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${Topic}/Questions`).push(data)
+        firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${course}/${Topic}/Questions`).push(data)
         // firebase.database().ref(`All Quiz/${course}/Visible`).set("OFF")
-        firebase.database().ref(`${insitute}/All Quiz/${course}/Visible`).set("OFF")
+
+        firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${Topic}/Visible`).set("OFF")
+        firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${course}/${Topic}/Visible`).set("OFF")
         setquestion("")
         setoption1("")  
         setoption2("")
@@ -42,20 +48,28 @@ function Admin() {
     return (
         <div>
             <div style={{ textAlign: "center" }}>
-                <div>
                     
                     <select onChange={(e) => setinsitute(e.target.value)} >
+                    <option selected disabled>Select institute</option>
+
                         <option value="BMJ">BMJ</option>
                         <option value="Saylani">SAYLANI</option>
                         <option value="ADAMJEE">ADAMJEE</option>
                     </select>
-                </div>
+                    
+                    <select onChange={(e) => setcourse(e.target.value)} >
+                    <option selected disabled>Select Course</option>
+                    <option value="Web&Mobile">Web&Mobile</option>
+                    <option value="GraphicDesigning">GraphicDesigning</option>
+                    <option value="CCNA">CCNA</option>
+                    </select>
           
                 <div>
          
-                    {emptyCourse ? <input value={course} disabled placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} /> : <input value={course} placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} />}
+                    {emptyCourse ? <input value={Topic} disabled placeholder="Select Topic " onChange={(e) => setTopic(e.target.value)} /> : <input value={course} placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} />}
                 </div>
 
+                {/* <input value={question} placeholder="Questions" onChange={(e) => setquestion(e.target.value)} /> <br /> */}
                 <input value={question} placeholder="Questions" onChange={(e) => setquestion(e.target.value)} /> <br />
                 <input value={option1} placeholder="Option1" onChange={(e) => setoption1(e.target.value)} /> <br />
                 <input value={option2} placeholder="Option1" onChange={(e) => setoption2(e.target.value)} /> <br />

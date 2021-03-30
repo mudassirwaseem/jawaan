@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 
 function Cs(props) {
+
     const history = useHistory();
     const [data1, setdata1] = useState([])
     const [loading, setloading] = useState(true)
@@ -12,7 +13,8 @@ function Cs(props) {
     const [optionChosen, setOptionChosen] = useState("");
     const [Username, setUsername] = useState("");
     const [UserId, setUserId] = useState("");
-    // const [ Insitute ,setInsitute] = useState("BMJ")
+    const [Course, setCourse] = useState("");
+    const [ Insitute ,setInsitute] = useState("")
 
     let [score, setScore] = useState(0);
     const [timer, setTimer] = useState({
@@ -27,7 +29,7 @@ function Cs(props) {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
-                
+
                 var uid = user.uid;
                 var user = user.displayName
                 setUserId(uid)
@@ -35,16 +37,27 @@ function Cs(props) {
                 // console.log(uid)
                 console.log(user)
                 
-                firebase.database().ref(`AllStudents/${uid}/AllData/Insitute`)
+                firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
                 .on("value", datasnap => {
                     console.log(datasnap.val())
-                    // setInsitute(datasnap.val())
+                    setInsitute(datasnap.val())
                     let insitute = datasnap.val()
-                    // setPicture(datasnap.val())
-                    firebase.database().ref(`${insitute}/All Quiz/${language}/Questions`)
+
+                    firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
                     .on("value", datasnap => {
-                        console.log(datasnap.val())
+                        // console.log(datasnap.val())
+                        setCourse(datasnap.val())
+  
+                    })
+                    
+                    // setPicture(datasnap.val())
+                    firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz/${language}/Questions`)
+                    .on("value", datasnap => {
+                        // console.log(datasnap.val())
                         setdata1(Object.values(datasnap.val()))
+                        console.log(Object.values(datasnap.val()))
+  
+
                         setloading(false)
                     })
                 })
@@ -104,7 +117,7 @@ function Cs(props) {
                 console.log(data)
 
                 // firebase.database().ref(`UserData1/UserId/${language}`).child("Wrong Answer").push(data)
-                firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
+                firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Wrong Answer`).push(data)
 
                 setCurrentQuestion(currentQuestion + 1);
                 setOptionChosen("");
@@ -122,7 +135,7 @@ function Cs(props) {
 
             if (data1[currentQuestion].answer == optionChosen) {
                 setScore(++score);
-                firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
+                firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Score`).set({ score })
                 alert(score)
                 localStorage.setItem("results", JSON.stringify(Result))
                 // console.log("chl rhaa")
@@ -136,8 +149,8 @@ function Cs(props) {
                     AnsChoosen: optionChosen
                 }
 
-                firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
-                firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
+                firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Score`).set({ score })
+                firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Wrong Answer`).push(data)
 
                 alert(score)
                 localStorage.setItem("results", JSON.stringify(Result))

@@ -12,8 +12,6 @@ function Quiz2() {
     const [loading, setLoading] = useState(true)
 
 
-    console.log(Insitute)
-
     useEffect(async () => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -21,15 +19,15 @@ function Quiz2() {
                 console.log(uid)
                 var user = user.displayName
    
-                firebase.database().ref(`AllStudents/${uid}/AllData/Insitute`)
+                firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
                     .on("value", datasnap => {
                         let insitute =  (datasnap.val())
                         setInsitute(datasnap.val())
                         console.log(datasnap.val())
 
-                        // console.log(Insitute)
+                        console.log(insitute)
 
-                        firebase.database().ref(`${insitute}/All Quiz`)
+                        firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz`)
                             .on("value", datasnap => {
                                 let quizes = datasnap.val()
 
@@ -40,10 +38,10 @@ function Quiz2() {
                                     if (quizes[keys[i]].Visible === "ON") enabled.push(keys[i])
                                     if (i === totalQuizes - 1) setdata(enabled)
                                     console.log(i, quizes)
-
                                 }
                             })
                     })
+
             } else {
                 console.log("error")
             }

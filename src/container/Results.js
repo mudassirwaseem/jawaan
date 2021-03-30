@@ -7,6 +7,8 @@ function Results(props) {
     const [UserId, setUserId] = useState("");
     const [Picture, setPicture] = useState("");
     const [Loading, setloading] = useState(true)
+    const [Course, setCourse] = useState("");
+
 
     const [customClassName, setCustomClassName] = useState(false);
 
@@ -35,16 +37,37 @@ function Results(props) {
                 //   setUserId(uid)
                 console.log(uid)
 
-                let data = firebase.database().ref(`Students/${uid}/${resultsData.language}/Wrong Answer`)
-                data.on("value", datasnap => {
+                let data3 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
+                data3.on("value", datasnap => {
                     console.log(datasnap.val())
-                    setdata(Object.values(datasnap.val()))
-                    setloading(false)
+                    let Insitute = datasnap.val()
+                    // setPicture(datasnap.val())
+                    // setdata(Object.values(datasnap.val()))
+                    // setloading(false)
 
+                    firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
+                    .on("value", datasnap => {
+                        // console.log(datasnap.val())
+                        setCourse(datasnap.val())
+                        let course = (datasnap.val())
+                        console.log(course)
+  
+                        let data = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/${Insitute}/${course}/${resultsData.language}/Wrong Answer`)
+                    data.on("value", datasnap => {
+                        console.log(datasnap.val())
+                        setdata(Object.values(datasnap.val()))
+                        setloading(false)
+    
+                    })
+                    })
+
+                    
                 })
 
+             
 
-                let data2 = firebase.database().ref(`Students/${uid}/PersonalData/profile`)
+
+                let data2 = firebase.database().ref(`Jawaan_Pakistan/Students/${uid}/PersonalData/profile`)
                 data2.on("value", datasnap => {
                     console.log(datasnap.val())
                     setPicture(datasnap.val())

@@ -3,60 +3,34 @@ import firebase from "../config/Firebase"
 import { useHistory } from 'react-router-dom'
 
 function Main2() {
+
     const history = useHistory();
     const [data, setdata] = useState([])
     const [quizes, setQuizes] = useState([])
     const [loading, setLoading] = useState(true)
-    
-
-
+    const [insitute, setinsitute] = useState("Saylani")
     const [condition] = useState("")
 
+    console.log(insitute)
 
     useEffect(async () => {
 
-
-        let data = await firebase.database().ref("ADAMJEE/All Quiz")
+        let data = await firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz`)
         data.on("value", datasnap => {
             // console.log(datasnap.val())
             console.log(Object.keys(datasnap.val()))
             setdata(Object.keys(datasnap.val()))
             setQuizes(datasnap.val())
             setLoading(false)
+            console.log("chal rha")
+       
         })
 
-    }, [])
-
-
-    // const googlesubmit = (() => {
-    //     var provider = new firebase.auth.GoogleAuthProvider();
-    //     firebase.auth()
-    //         .signInWithPopup(provider)
-    //         .then((result) => {
-    //             /** @type {firebase.auth.OAuthCredential} */
-    //             var credential = result.credential;
-    //             var user = result.user;
-    //             let userid = user.uid
-    //             history.replace("/")
-    //             let create_user = {
-    //                 name: user.displayName,
-    //                 email: user.email,
-    //                 profile: user.photoURL,
-    //                 uid: user.uid,
-
-    //             }
-    //             console.log(create_user)
-    //             firebase.database().ref(`Students/${userid}/PersonalData`).set(create_user)
-
-    //             // ...
-    //         }).catch((error) => {
-
-    //             console.log(error.message)
-    //         });
-    // })
+    }, [insitute])
 
     const handleQuizStatus = (name, status) => {
-        firebase.database().ref(`ADAMJEE/All Quiz/${name}/Visible`).set(status)
+        firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz/${name}/Visible`).set(status)
+        // firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${name}/Visible`).set(status)
             .then(() => alert("Quiz Status Changed"))
             .catch(error => alert(error.message))
     }
@@ -65,7 +39,14 @@ function Main2() {
 
     return (
         <div>
-           
+           <div>
+               <select onChange={(e) => setinsitute(e.target.value)} >
+                   {/* <option selected disabled>Select institute</option> */}
+                   <option value="BMJ">BMJ</option>
+                   <option value="ADAMJEE">ADAMJEE</option>
+                   <option value="Saylani">Saylani</option>
+               </select>
+           </div>
 
             {!loading && <div>
                 {data.map((val,index) => {
@@ -82,6 +63,7 @@ function Main2() {
 
 
                 })}
+
             </div>}
 
         </div>

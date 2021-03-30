@@ -2,6 +2,7 @@ import React from 'react'
 import firebase from "../config/Firebase"
 import { useHistory } from 'react-router-dom'
 
+
 function Login2() {
     const history = useHistory();
 
@@ -24,7 +25,7 @@ function Login2() {
 
                 }
                 console.log(create_user)
-                firebase.database().ref(`AllStudents/${userid}/PersonalData`).set(create_user)
+                firebase.database().ref(`Jawaan_Pakistan/Users/${userid}/AllData/Profile`).set(create_user)
 
                 
             }).catch((error) => {

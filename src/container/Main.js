@@ -37,6 +37,7 @@ function Main() {
                 history.replace("/")
                 let create_user = {
                     name: user.displayName,
+                    value : user.isNewUser,
                     email: user.email,
                     profile: user.photoURL,
                     uid: user.uid,
