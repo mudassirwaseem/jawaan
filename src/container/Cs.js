@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 
 function Cs(props) {
+
     const history = useHistory();
     const [data1, setdata1] = useState([])
     const [loading, setloading] = useState(true)
@@ -13,11 +14,13 @@ function Cs(props) {
     const [Username, setUsername] = useState("");
     const [UserId, setUserId] = useState("");
 
+
     let [score, setScore] = useState(0);
     const [timer, setTimer] = useState({
-        min: 4,
+        min: 40,
         sec: 59,
     });
+
     let length = data1.length
 
     useEffect(async () => {
@@ -46,9 +49,12 @@ function Cs(props) {
             setdata1(Object.values(datasnap.val()))
             setloading(false)
         })
+
+
         click()
 
     }, [])
+
     const Result = {
         score,
         language,
@@ -60,10 +66,10 @@ function Cs(props) {
         localStorage.setItem("results", JSON.stringify(Result))
         history.replace("/Results", Result)
     }
-    
+
     const click = () => {
         setInterval(() => {
-            setTimer((state, props) => {
+            setTimer((state) => {
                 return {
                     min: state.sec == 0 ? state.min - 1 : state.min,
                     sec: state.sec == 0 ? 59 : state.sec - 1,
@@ -83,7 +89,6 @@ function Cs(props) {
                 setCurrentQuestion(currentQuestion + 1);
                 setOptionChosen("")
             } else if (data1[currentQuestion].answer !== optionChosen) {
-
 
                 let data = {
                     Question: data1[currentQuestion].question,
@@ -115,7 +120,6 @@ function Cs(props) {
                 firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
                 alert(score)
                 localStorage.setItem("results", JSON.stringify(Result))
-                // console.log("chl rhaa")
                 history.replace('/Results')
             } else if (data1[currentQuestion].answer !== optionChosen) {
                 setScore(score);
@@ -155,6 +159,7 @@ function Cs(props) {
                 {timer.min < 10 ? "0" + timer.min : timer.min}:
     {timer.sec < 10 ? "0" + timer.sec : timer.sec}
             </div>
+
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>{language} QUIZ </h1>
             </div>
@@ -163,7 +168,7 @@ function Cs(props) {
             <button onClick={() => { chooseOption(data1[currentQuestion].option2); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > B )   {data1[currentQuestion].option2} </h3> </button> <br />
             <button onClick={() => { chooseOption(data1[currentQuestion].option3); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > C )   {data1[currentQuestion].option3} </h3> </button> <br />
             <button onClick={() => { chooseOption(data1[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {data1[currentQuestion].option4} </h3> </button> <br />
-           
+
             <div style={{ textAlign: "center" }}>
 
 
@@ -188,6 +193,7 @@ function Cs(props) {
                     </div>
                 )}
 
+
                 {currentQuestion + 1} OF {length} Question
                 <div style={{ display: "flex", justifyContent: "space-around", marginTop: 20 }}>
                     {data1.map((v, i) => {
@@ -199,10 +205,10 @@ function Cs(props) {
                             </div>
 
                         )
-                        { console.log(currentQuestion + 1) }
                     })}
                 </div>
             </div>
+            
 
 
             {/* 

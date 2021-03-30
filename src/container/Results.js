@@ -76,6 +76,7 @@ function Results(props) {
 
     return (
         <div className="App">
+            
             <div style={{ border: "2px solid", width: "60%", textAlign: "center", margin: "auto", marginBottom: 20 }}>
                 <img style={{ borderRadius: "50%" }} src={Picture} alt="" />
                 <h1>Name : {resultsData.Username}</h1>

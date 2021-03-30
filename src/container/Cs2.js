@@ -7,11 +7,12 @@ function Cs(props) {
     const history = useHistory();
     const [data1, setdata1] = useState([])
     const [loading, setloading] = useState(true)
-    const [language, setlanguage] = useState(props.location.name);
+    const [language] = useState(props.location.name);
     let [currentQuestion, setCurrentQuestion] = useState(0);
     const [optionChosen, setOptionChosen] = useState("");
     const [Username, setUsername] = useState("");
     const [UserId, setUserId] = useState("");
+    // const [ Insitute ,setInsitute] = useState("BMJ")
 
     let [score, setScore] = useState(0);
     const [timer, setTimer] = useState({
@@ -26,13 +27,27 @@ function Cs(props) {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
+                
                 var uid = user.uid;
                 var user = user.displayName
                 setUserId(uid)
                 setUsername(user)
-                console.log(uid)
+                // console.log(uid)
                 console.log(user)
-
+                
+                firebase.database().ref(`AllStudents/${uid}/AllData/Insitute`)
+                .on("value", datasnap => {
+                    console.log(datasnap.val())
+                    // setInsitute(datasnap.val())
+                    let insitute = datasnap.val()
+                    // setPicture(datasnap.val())
+                    firebase.database().ref(`${insitute}/All Quiz/${language}/Questions`)
+                    .on("value", datasnap => {
+                        console.log(datasnap.val())
+                        setdata1(Object.values(datasnap.val()))
+                        setloading(false)
+                    })
+                })
 
             } else {
                 console.log("error")
@@ -40,12 +55,7 @@ function Cs(props) {
         });
 
 
-        let data = await firebase.database().ref(`All Quiz/${language}/Questions`)
-        data.on("value", datasnap => {
-            console.log(datasnap.val())
-            setdata1(Object.values(datasnap.val()))
-            setloading(false)
-        })
+      
         click()
 
     }, [])

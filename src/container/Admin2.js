@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import firebase from "../config/Firebase"
 
-function Admin() {
 
+function Admin() {
+           
     const [question, setquestion] = useState("")
     const [option1, setoption1] = useState("")
     const [option2, setoption2] = useState("")
@@ -10,9 +11,9 @@ function Admin() {
     const [option4, setoption4] = useState("")
     const [answer, setanswer] = useState("")
     const [course, setcourse] = useState("")
-    const [insitute, setinsitute] = useState("BMJ")
+    const [insitute, setinsitute] = useState("")
+    const [Topic ,setTopic] = useState("")
     const [emptyCourse, setEmptyCourse] = useState(false)
-    // const [optionSelected, setOptionSelected] = useState("unselected")
 
 
 
@@ -22,15 +23,15 @@ function Admin() {
         firebase.database().ref(`${insitute}/All Quiz/${course}/Questions`).push(data)
         // firebase.database().ref(`All Quiz/${course}/Visible`).set("OFF")
         firebase.database().ref(`${insitute}/All Quiz/${course}/Visible`).set("OFF")
-        setquestion("");
-        setoption1("")
+        setquestion("")
+        setoption1("")  
         setoption2("")
         setoption3("")
         setoption4("")
         setanswer("")
         
         if (course === "") {
-            setEmptyCourse(false)
+            setEmptyCourse(false)   
         } else {
             setEmptyCourse(true)
         }
@@ -38,19 +39,18 @@ function Admin() {
         console.log(data)
     }
 
-
     return (
         <div>
             <div style={{ textAlign: "center" }}>
-
                 <div>
                     
                     <select onChange={(e) => setinsitute(e.target.value)} >
                         <option value="BMJ">BMJ</option>
-                        <option value="SAYLANI">SAYLANI</option>
+                        <option value="Saylani">SAYLANI</option>
                         <option value="ADAMJEE">ADAMJEE</option>
                     </select>
                 </div>
+          
                 <div>
          
                     {emptyCourse ? <input value={course} disabled placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} /> : <input value={course} placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} />}
@@ -61,7 +61,7 @@ function Admin() {
                 <input value={option2} placeholder="Option1" onChange={(e) => setoption2(e.target.value)} /> <br />
                 <input value={option3} placeholder="Option1" onChange={(e) => setoption3(e.target.value)} /> <br />
                 <input value={option4} placeholder="Option1" onChange={(e) => setoption4(e.target.value)} /> <br />
-                <input value={answer} placeholder="Answer" onChange={(e) => setanswer(e.target.value)} /> <br />
+                <input value={answer} placeholder="Answer" onChange={(e) =>  setanswer(e.target.value)} /> <br />
 
                 <button onClick={Savedata}> Save</button>
             </div>

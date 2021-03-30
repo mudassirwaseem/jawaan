@@ -38,14 +38,10 @@ function Admin() {
 
     return (
         <div>
-            <div style={{ textAlign: "center" }}>
-
-                
+            <div style={{ textAlign: "center" }}>                
                 <div>
-         
                     {emptyCourse ? <input value={course} disabled placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} /> : <input value={course} placeholder="Select Course " onChange={(e) => setcourse(e.target.value)} />}
                 </div>
-
                 <input value={question} placeholder="Questions" onChange={(e) => setquestion(e.target.value)} /> <br />
                 <input value={option1} placeholder="Option1" onChange={(e) => setoption1(e.target.value)} /> <br />
                 <input value={option2} placeholder="Option1" onChange={(e) => setoption2(e.target.value)} /> <br />

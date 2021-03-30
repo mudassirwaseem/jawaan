@@ -13,9 +13,12 @@ import Main from "../container/Main"
 import Files from "../container/Files"
 import Admin2 from "../container/Admin2"
 import Cs2 from "../container/Cs2"
-
+import Quiz2 from "../container/Quiz2"
+import Main2 from "../container/Main2"
 import Counter from "../container/Counter"
 
+import Foam from "../container/Foam"
+import Login2 from "../container/Login2"
 
 import {
     BrowserRouter as Router,
@@ -44,6 +47,10 @@ function Navigation() {
           <Route exact path='/Cs'  component={Cs}/>
           <Route exact path='/Main' component={Main}/>
           <Route exact path='/Cs2' component={Cs2}/>
+          <Route exact path='/Quiz2' component={Quiz2}/>
+          <Route exact path='/Main2' component={Main2}/>
+          <Route exact path='/Login2' component={Login2}/>
+          <Route exact path='/Foam' component={Foam}/>
           {/* <Route exact path='/' component={SetData} />
           <Route exact path='/data' component={Select} /> */}
       
