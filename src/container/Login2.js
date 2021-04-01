@@ -1,11 +1,10 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import firebase from "../config/Firebase"
 import { useHistory } from 'react-router-dom'
 
 
 function Login2() {
     const history = useHistory();
-
     const googlesubmit = (() => {
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth()
@@ -15,6 +14,8 @@ function Login2() {
                 /** @type {firebase.auth.OAuthCredential} */
                 var credential = result.credential;
                 var user = result.user;
+               
+                // console.log(user)
                 let userid = user.uid
                 history.replace("/Foam")
                 let create_user = {
@@ -22,9 +23,9 @@ function Login2() {
                     email: user.email,
                     profile: user.photoURL,
                     uid: user.uid,
-
                 }
                 console.log(create_user)
+                
                 firebase.database().ref(`Jawaan_Pakistan/Users/${userid}/AllData/Profile`).set(create_user)
 
                 

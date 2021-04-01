@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import firebase from "../config/Firebase"
 import "./App.css";
-function Results(props) {
+function Results2(props) {
 
     const [data, setdata] = useState([])
     const [UserId, setUserId] = useState("");
@@ -52,31 +52,30 @@ function Results(props) {
                 console.log(uid)
                 
 
-                let data3 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
-                data3.on("value", datasnap => {
-                    console.log(datasnap.val())
-                    let Insitute = datasnap.val()
-                    // setPicture(datasnap.val())
-                    // setdata(Object.values(datasnap.val()))
-                    // setloading(false)
+                // let data3 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
+                // data3.on("value", datasnap => {
+                //     console.log(datasnap.val())
+                //     let Insitute = datasnap.val()
+                //     // setPicture(datasnap.val())
+                //     // setdata(Object.values(datasnap.val()))
+                //     // setloading(false)
 
-                    firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
-                    .on("value", datasnap => {
-                        // console.log(datasnap.val())
-                        setCourse(datasnap.val())
-                        let course = (datasnap.val())
-                        console.log(course)
+                //     firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
+                //     .on("value", datasnap => {
+                //         // console.log(datasnap.val())
+                //         setCourse(datasnap.val())
+                //         let course = (datasnap.val())
+                //         console.log(course)
   
-                        let data = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/${Insitute}/${course}/${resultsData.language}/Wrong Answer`)
+                        let data = firebase.database().ref(`Students/${uid}/${resultsData.language}/Wrong Answer`)
                     data.on("value", datasnap => {
                         console.log(datasnap.val())
                         setdata(Object.values(datasnap.val()))
                         setloading(false)
 
-                        firebase.database().ref(`Jawaan_Pakistan/Results/${Insitute}/${course}/${resultsData.language}/${uid}`).set(AllData)
 
-                    })
-                    })
+                    // })
+                    // })
 
                     
                 })
@@ -84,14 +83,14 @@ function Results(props) {
              
 
 
-                let data2 = firebase.database().ref(`Jawaan_Pakistan/Students/${uid}/PersonalData/profile`)
-                data2.on("value", datasnap => {
-                    console.log(datasnap.val())
-                    setPicture(datasnap.val())
-                    // setdata(Object.values(datasnap.val()))
-                    // setloading(false)
+                // let data2 = firebase.database().ref(`Jawaan_Pakistan/Students/${uid}/PersonalData/profile`)
+                // data2.on("value", datasnap => {
+                //     console.log(datasnap.val())
+                //     setPicture(datasnap.val())
+                //     // setdata(Object.values(datasnap.val()))
+                //     // setloading(false)
 
-                })
+                // })
 
 
             } else {
@@ -122,8 +121,8 @@ function Results(props) {
                 <img style={{ borderRadius: "50%" }} src={Picture} alt="" />
                 <h1>Name : {resultsData.Username}</h1>
                 <h1> Course : {resultsData.language}</h1>
-                <h1>Score :{resultsData.score}/ {resultsData.length} </h1>
-                <h2>Percentage : {Math.floor(resultsData.score / resultsData.length * 100)} %</h2>
+                <h1>Score :{resultsData.score1}/ {resultsData.length} </h1>
+                <h2>Percentage : {Math.floor(resultsData.score1 / resultsData.length * 100)} %</h2>
 
 
                 <h2> Grade : {resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""}</h2>
@@ -165,5 +164,5 @@ function Results(props) {
         // }
     )
 }
-export default Results
+export default Results2
 

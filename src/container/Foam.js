@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 
 function Foam() {
-    
+
     const history = useHistory();
     const [Gender, setGender] = useState("")
     const [Insitute, setInsitute] = useState("")
@@ -37,7 +37,8 @@ function Foam() {
         history.replace("/Quiz2")
     }
     return (
-        <div>
+        <div className="App">
+            
             <h1>Fill Your Information</h1>
             <div>
 

@@ -19,6 +19,8 @@ import Counter from "../container/Counter"
 
 import Foam from "../container/Foam"
 import Login2 from "../container/Login2"
+import Final from "../container/Finalresults"
+import Results2 from "../container/Results2"
 
 import {
     BrowserRouter as Router,
@@ -51,6 +53,8 @@ function Navigation() {
           <Route exact path='/Main2' component={Main2}/>
           <Route exact path='/Login2' component={Login2}/>
           <Route exact path='/Foam' component={Foam}/>
+          <Route exact path='/Final' component={Final}/>
+          <Route exact path='/Results2' component={Results2}/>
           {/* <Route exact path='/' component={SetData} />
           <Route exact path='/data' component={Select} /> */}
       

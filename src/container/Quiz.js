@@ -15,7 +15,7 @@ function Quiz() {
 
     useEffect(async () => {
 
-        let data = await firebase.database().ref("All Quiz")
+        let data = await firebase.database().ref(`All Quiz/Saylani/CCNA`)
         data.on("value", datasnap => {
             let quizes = datasnap.val()
 

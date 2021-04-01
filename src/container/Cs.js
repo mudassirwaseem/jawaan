@@ -16,12 +16,16 @@ function Cs(props) {
 
 
     let [score, setScore] = useState(0);
+    let [score1, setScore1] = useState(0);
     const [timer, setTimer] = useState({
         min: 40,
         sec: 59,
     });
 
     let length = data1.length
+    
+
+    // console.log(data1[currentQuestion].Answer)
 
     useEffect(async () => {
 
@@ -43,7 +47,7 @@ function Cs(props) {
         });
 
 
-        let data = await firebase.database().ref(`All Quiz/${language}/Questions`)
+        let data = await firebase.database().ref(`All Quiz/Saylani/CCNA/${language}/Questions`)
         data.on("value", datasnap => {
             console.log(datasnap.val())
             setdata1(Object.values(datasnap.val()))
@@ -55,8 +59,10 @@ function Cs(props) {
 
     }, [])
 
+    // console.log(data1[0].Options[0])
+
     const Result = {
-        score,
+        score1,
         language,
         Username,
         length
@@ -109,34 +115,81 @@ function Cs(props) {
         }
     };
 
+    const nextQuestion1 = () => {
+        if (optionChosen !== "") {
+            if (data1[currentQuestion].Answer == optionChosen) {
+                console.log(data1[currentQuestion].Question)
+                console.log(data1[currentQuestion].Answer)
+                console.log(optionChosen)
+                setScore1(++score1);
+                alert(score1)
+                console.log("right")
+
+                setCurrentQuestion(currentQuestion + 1);
+                setOptionChosen("")
+            } else if (data1[currentQuestion].Answer !== optionChosen) {
+
+                let data = {
+                    Question: data1[currentQuestion].Question,
+                    CrAnswer: data1[currentQuestion].Answer,
+                    AnsChoosen: optionChosen
+                }
+                console.log("wrong")
+
+                console.log(data)
+
+                // firebase.database().ref(`UserData1/UserId/${language}`).child("Wrong Answer").push(data)
+                firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
+
+                setCurrentQuestion(currentQuestion + 1);
+                setOptionChosen("");
+            }
+        } else {
+            alert("choose the option")
+        }
+    };
+
+    const chooseOption = (option) => {
+        setOptionChosen(option);
+        console.log(option)
+    };
+
+    // const nextQuestion1 = ()=>{
+    //     console.log(data1[currentQuestion].Answer)
+    //     console.log(optionChosen)
+    //     if (data1[currentQuestion].Answer == optionChosen)
+    //     setCurrentQuestion(currentQuestion + 1)
+    //     alert("Scoore")
+    // }
+
 
 
     const finishQuiz = () => {
         if (optionChosen !== "") {
 
 
-            if (data1[currentQuestion].answer == optionChosen) {
-                setScore(++score);
-                firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
-                alert(score)
+            if (data1[currentQuestion].Answer == optionChosen) {
+                setScore(++score1);
+                firebase.database().ref(`Students/${UserId}/${language}/Score`).set({ score })
+                alert(score1)
                 localStorage.setItem("results", JSON.stringify(Result))
-                history.replace('/Results')
-            } else if (data1[currentQuestion].answer !== optionChosen) {
-                setScore(score);
+                history.replace('/Results2')
+            } else if (data1[currentQuestion].Answer !== optionChosen) {
+                setScore(score1);
 
                 let data = {
                     Question: data1[currentQuestion].question,
-                    CrAnswer: data1[currentQuestion].answer,
+                    CrAnswer: data1[currentQuestion].Answer,
                     AnsChoosen: optionChosen
-                }
+                } 
 
-                firebase.database().ref(`Students/${UserId}/${language}/`).push({ score })
+                firebase.database().ref(`Students/${UserId}/${language}/Score`).set({ score1 })
                 firebase.database().ref(`Students/${UserId}/${language}`).child("Wrong Answer").push(data)
 
                 alert(score)
                 localStorage.setItem("results", JSON.stringify(Result))
                 // console.log("chl rhaa")
-                history.replace('/Results')
+                history.replace('/Results2')
             }
         } else {
             alert("choose the option")
@@ -144,9 +197,13 @@ function Cs(props) {
     };
 
 
-    const chooseOption = (option) => {
-        setOptionChosen(option);
-    };
+    // const chooseOption = (option) => {
+    //     setOptionChosen(option);
+    //     console.log(option)
+    // };
+
+    
+
     if (loading) {
         return <div>
             <h1>Loading</h1>
@@ -163,11 +220,44 @@ function Cs(props) {
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>{language} QUIZ </h1>
             </div>
-            <h2 > Q{currentQuestion + 1} : {data1[currentQuestion].question} </h2>
-            <button onClick={() => { chooseOption(data1[currentQuestion].option1); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }}> A )    {data1[currentQuestion].option1} </h3> </button> <br />
+            <h2 > Q{currentQuestion + 1} : {data1[currentQuestion].Question} </h2>
+            <div>
+
+                {data1[currentQuestion].Options.map((Option, i) => {
+                    return <div>
+
+                        <button style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }} onClick={() => {chooseOption(Option)}}>  {Option}</button> <br />
+
+                    </div>
+
+
+                })}
+ {currentQuestion == data1.length - 1 ? (
+                    <>
+                        <button onClick={finishQuiz} id="nextQuestion" style={{ width: "60%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                            Finish Quiz
+    </button>
+                        {/* <button onClick={PreQuestion} id="nextQuestion" style={{ width: "40%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+            Previous
+ </button> */}
+                    </>
+                ) : (
+                    <div>
+                        <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                            <button onClick={nextQuestion1} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
+                                Next Question
+    </button>
+
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* <button onClick={() => { chooseOption(data1[currentQuestion].option1); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }}> A )    {data1[currentQuestion].option1} </h3> </button> <br />
             <button onClick={() => { chooseOption(data1[currentQuestion].option2); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > B )   {data1[currentQuestion].option2} </h3> </button> <br />
             <button onClick={() => { chooseOption(data1[currentQuestion].option3); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > C )   {data1[currentQuestion].option3} </h3> </button> <br />
-            <button onClick={() => { chooseOption(data1[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {data1[currentQuestion].option4} </h3> </button> <br />
+            <button onClick={() => { chooseOption(data1[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {data1[currentQuestion].option4} </h3> </button> <br /> */}
 
             <div style={{ textAlign: "center" }}>
 
@@ -208,7 +298,7 @@ function Cs(props) {
                     })}
                 </div>
             </div>
-            
+
 
 
             {/* 

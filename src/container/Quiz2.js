@@ -10,6 +10,8 @@ function Quiz2() {
     const [Insitute, setInsitute] = useState("")
     const [data, setdata] = useState([])
     const [loading, setLoading] = useState(true)
+    const [Course, setCourse] = useState("");
+
 
 
     useEffect(async () => {
@@ -18,16 +20,27 @@ function Quiz2() {
                 var uid = user.uid;
                 console.log(uid)
                 var user = user.displayName
+
+                
    
                 firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
                     .on("value", datasnap => {
                         let insitute =  (datasnap.val())
                         setInsitute(datasnap.val())
                         console.log(datasnap.val())
-
                         console.log(insitute)
 
-                        firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz`)
+
+                        firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
+                        .on("value", datasnap => {
+                            // console.log(datasnap.val())
+                            setCourse(datasnap.val())
+                            let course = (datasnap.val())
+                            console.log(datasnap.val())
+      
+
+
+                        firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}`)
                             .on("value", datasnap => {
                                 let quizes = datasnap.val()
 
@@ -40,6 +53,8 @@ function Quiz2() {
                                     console.log(i, quizes)
                                 }
                             })
+                    })
+
                     })
 
             } else {
