@@ -26,20 +26,21 @@ function Results(props) {
 
 
    
-    let gradeCal =  resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""
+    let gradeCal =  resultsData.score >= 70 ? resultsData.grade = "A" : resultsData.score >= 60 ? resultsData.grade = "B" : resultsData.score >= 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""
    
     let AllData ={
+        
     Name : resultsData.Username,
     CorrectAnswer : resultsData.score,
     QuestionLength: resultsData.length,
     Percentage : Math.floor(resultsData.score / resultsData.length * 100),
     Grade : gradeCal,
-    UId: resultsData.UserId
+    UId: resultsData.UserId,
+    Course : resultsData.language
+
    }
 
    console.log(AllData)
-
-
 
 
     useEffect(() => {
@@ -56,60 +57,41 @@ function Results(props) {
                 data3.on("value", datasnap => {
                     console.log(datasnap.val())
                     let Insitute = datasnap.val()
-                    // setPicture(datasnap.val())
-                    // setdata(Object.values(datasnap.val()))
-                    // setloading(false)
 
-                    firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
+
+                    firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Course`)
                     .on("value", datasnap => {
                         // console.log(datasnap.val())
                         setCourse(datasnap.val())
                         let course = (datasnap.val())
                         console.log(course)
-  
+
                         let data = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/${Insitute}/${course}/${resultsData.language}/Wrong Answer`)
                     data.on("value", datasnap => {
                         console.log(datasnap.val())
                         setdata(Object.values(datasnap.val()))
                         setloading(false)
-
                         firebase.database().ref(`Jawaan_Pakistan/Results/${Insitute}/${course}/${resultsData.language}/${uid}`).set(AllData)
 
                     })
                     })
-
-                    
+            
                 })
 
-             
-
-
-                let data2 = firebase.database().ref(`Jawaan_Pakistan/Students/${uid}/PersonalData/profile`)
+                let data2 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/profile`)
                 data2.on("value", datasnap => {
                     console.log(datasnap.val())
                     setPicture(datasnap.val())
                     // setdata(Object.values(datasnap.val()))
                     // setloading(false)
-
                 })
-
-
             } else {
                 // User is signed out
                 // ...
             }
-
-
         });
 
-
-
-
     }, [])
-
-
-
-
 
     if (Loading) {
         return <div><h1>loading</h1></div>

@@ -25,8 +25,9 @@ function Login2() {
                     uid: user.uid,
                 }
                 console.log(create_user)
-                
+
                 firebase.database().ref(`Jawaan_Pakistan/Users/${userid}/AllData/Profile`).set(create_user)
+                firebase.database().ref(`Jawaan_Pakistan/ALL USERS/${userid}/Profile`).set(create_user)
 
                 
             }).catch((error) => {
@@ -37,9 +38,9 @@ function Login2() {
 
 
     return (
-        <div>
+        <div className="App">
             
-<button onClick={googlesubmit}>Google login</button>
+<button style={{backgroundColor:"red",color:"white",width:300,height:40,fontWeight:"bold",borderRadius:30,justifyContent:"center"}} onClick={googlesubmit}>Google login</button>
 
         </div>
     )

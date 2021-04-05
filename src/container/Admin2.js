@@ -106,15 +106,15 @@ function Admin() {
     const [answer, setanswer] = useState("")
     const [insitute, setinsitute] = useState("BMJ")
     const [Topic ,setTopic] = useState("")
-    const [course ,setcourse] = useState("Web&Mobile")
+    const [course ,setcourse] = useState("Web&Mobile")  
+
     const [emptyCourse, setEmptyCourse] = useState(false)
 
 
 
     const Savedata = () => {
-        // let data = { question, option1, option2, option3, option4, answer, insitute }
 
-
+  
         let data = [option1,option2 ,option3,option4]
 
         let arr = []
@@ -131,13 +131,10 @@ function Admin() {
           }
          }
 
-        let data1 = question
-        let data2 = answer
-        
-        let fulldata ={
+        let fulldata = {
             Options:arr,
-            Question: data1,
-            Answer : data2
+            Question: question,
+            Answer : answer
         }
         
 
@@ -146,6 +143,7 @@ function Admin() {
         // firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz/${Topic}/Questions`).push(data)
         firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${Topic}/Questions`).push(fulldata)
         firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${course}/${Topic}/Questions`).push(fulldata)
+    
         // firebase.database().ref(`All Quiz/${course}/Visible`).set("OFF")
 
         firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${Topic}/Visible`).set("OFF")
@@ -192,7 +190,7 @@ function Admin() {
                 <div>
          
                     {emptyCourse ? <input value={Topic} disabled placeholder="Select Topic " onChange={(e) => setTopic(e.target.value)} /> : <input value={Topic} placeholder="Select Course " onChange={(e) => setTopic(e.target.value)} />}
-                </div>
+                </div> 
 
                 {/* <input value={question} placeholder="Questions" onChange={(e) => setquestion(e.target.value)} /> <br /> */}
                 <input value={question} placeholder="Questions" onChange={(e) => setquestion(e.target.value)} /> <br />

@@ -277,17 +277,43 @@ function Cs2(props) {
     const [Insitute, setInsitute] = useState("")
 
     let [score, setScore] = useState(0);
-    const [timer, setTimer] = useState({
+    const [timer, setTimer] = useState({    
         min: 4,
         sec: 59,
     });
+
+
     let length = data1.length
 
+    // let kanga = data1
+    
+
+    function shuffle(data1) {
+        var currentIndex = data1.length, temporaryValue, randomIndex;
+      
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+      
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+      
+          // And swap it with the current element.
+          temporaryValue = data1[currentIndex];
+          data1[currentIndex] = data1[randomIndex];
+          data1[randomIndex] = temporaryValue;
+        }
+      
+        return data1;
+      }
+
+
+
+    
     useEffect(async () => {
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-
 
                 var uid = user.uid;
                 var user = user.displayName
@@ -302,25 +328,21 @@ function Cs2(props) {
                         setInsitute(datasnap.val())
                         let insitute = datasnap.val()
 
-                        firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/course`)
+                        firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Course`)
                             .on("value", datasnap => {
-                                // console.log(datasnap.val())
                                 setCourse(datasnap.val())
                                 let course = (datasnap.val())
                                 console.log(datasnap.val())
 
-
-                                // setPicture(datasnap.val())
                                 firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${language}/Questions`)
-                                    .on("value", datasnap => {
+                                    .on("value", datasnap => { 
 
+                                         setdata1(Object.values(datasnap.val()))
 
-                                        setdata1(Object.values(datasnap.val()))
                                         console.log("Quiz data", Object.values(datasnap.val()))
-
-
-
+                     
                                         setloading(false)
+                                        
                                     })
                             })
                     })
@@ -331,10 +353,10 @@ function Cs2(props) {
         });
 
 
-
         click()
 
     }, [])
+
     const Result = {
         score,
         language,
@@ -351,7 +373,8 @@ function Cs2(props) {
 
     const click = () => {
         setInterval(() => {
-            setTimer((state, props) => {
+            setTimer((state) => {
+
                 return {
                     min: state.sec == 0 ? state.min - 1 : state.min,
                     sec: state.sec == 0 ? 59 : state.sec - 1,
@@ -367,6 +390,7 @@ function Cs2(props) {
                 console.log(data1[currentQuestion].Question)
                 console.log(data1[currentQuestion].Answer)
                 console.log(optionChosen)
+
                 setScore(++score);
                 
                 console.log("right")
@@ -380,6 +404,7 @@ function Cs2(props) {
                     CrAnswer: data1[currentQuestion].Answer,
                     AnsChoosen: optionChosen
                 }
+
                 console.log("wrong")
 
                 console.log(data)
@@ -395,57 +420,25 @@ function Cs2(props) {
     };
 
 
-    // const nextQuestion = () => {
-    //     if (optionChosen !== "") {
-    //         if (data1[currentQuestion].answer == optionChosen) {
-    //             console.log(data1[currentQuestion].question)
-    //             console.log(data1[currentQuestion].answer)
-    //             console.log(optionChosen)
-    //             setScore(++score);
-
-    //             setCurrentQuestion(currentQuestion + 1);
-    //             setOptionChosen("")
-    //         } else if (data1[currentQuestion].answer !== optionChosen) {
-
-
-    //             let data = {
-    //                 Question: data1[currentQuestion].question,
-    //                 CrAnswer: data1[currentQuestion].answer,
-    //                 AnsChoosen: optionChosen
-    //             }
-
-    //             console.log(data)
-
-    //             // firebase.database().ref(`UserData1/UserId/${language}`).child("Wrong Answer").push(data)
-    //             firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Wrong Answer`).push(data)
-
-    //             setCurrentQuestion(currentQuestion + 1);
-    //             setOptionChosen("");
-    //         }
-    //     } else {
-    //         alert("choose the option")//tumhari array kdr h?
-    //     }
-    // };
+    
 
 
 
     const finishQuiz = () => {
         if (optionChosen !== "") {
-
-
             if (data1[currentQuestion].Answer == optionChosen) {
                 setScore(++score);
-
-
                  firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Score`).set({ score })
-                alert(score)
-                localStorage.setItem("results", JSON.stringify(Result))
+                 localStorage.setItem("results", JSON.stringify(Result))
                 history.replace('/Results')
-            } else if (data1[currentQuestion].Answer !== optionChosen) {
+
+            } 
+            else if (data1[currentQuestion].Answer !== optionChosen) {
                 setScore(score);
+                
 
                 let data = {
-                    Question: data1[currentQuestion].question,
+                    Question: data1[currentQuestion].Question,
                     CrAnswer: data1[currentQuestion].Answer,
                     AnsChoosen: optionChosen
                 } 
@@ -453,7 +446,6 @@ function Cs2(props) {
                 firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Score`).set({ score })
                 firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Wrong Answer`).push(data)
 
-                alert(score)
                 localStorage.setItem("results", JSON.stringify(Result))
                 // console.log("chl rhaa")
                 history.replace('/Results')
@@ -506,6 +498,7 @@ function Cs2(props) {
     }
 
     return (
+        
         <div style={{ width: "60%", margin: "auto" }} >
             <div style={{ color: "black" }}>
                 {timer.min < 10 ? "0" + timer.min : timer.min}:
@@ -514,21 +507,19 @@ function Cs2(props) {
             <div style={{ marginBottom: 50, textAlign: "center" }}>
                 <h1 style={{ borderBottom: "2px solid" }}>{language} QUIZ </h1>
             </div>
+            
             <h2 > Q{currentQuestion + 1} : {data1[currentQuestion].Question} </h2>
 
-            {/* <button onClick={() => { chooseOption(data1[currentQuestion].option1); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }}> A )    {data1[currentQuestion].option1} </h3> </button> <br />
-            <button onClick={() => { chooseOption(data1[currentQuestion].option2); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > B )   {data1[currentQuestion].option2} </h3> </button> <br />
-            <button onClick={() => { chooseOption(data1[currentQuestion].option3); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > C )   {data1[currentQuestion].option3} </h3> </button> <br />
-            <button onClick={() => { chooseOption(data1[currentQuestion].option4); }} style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }}>  <h3 style={{ width: '100%' }} > D )   {data1[currentQuestion].option4} </h3> </button> <br /> */}
-            {data1[currentQuestion].Options.map((Option, i) => {
-                return <div>
+             {data1[currentQuestion].Options.map((Option, index) => {
+                return <div key={index}>
 
-                    <button style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }} onClick={() => { chooseOption(Option) }}>  {Option}</button> <br />
+                    <button  style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }} onClick={() => { chooseOption(Option) }}>  {Option}</button> <br />
 
                 </div>
 
 
             })}
+
             {currentQuestion == data1.length - 1 ? (
                 <>
                     <button onClick={finishQuiz} id="nextQuestion" style={{ width: "60%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
@@ -536,6 +527,7 @@ function Cs2(props) {
                      </button>
 
                 </>
+                
             ) : (
                 <div>
                         <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -549,25 +541,6 @@ function Cs2(props) {
             )}
             <div style={{ textAlign: "center" }}>
 
-{/* 
-                {currentQuestion == data1.length - 1 ? (
-                    <>
-                        <button onClick={finishQuiz} id="nextQuestion" style={{ width: "60%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
-                            Finish Quiz
-    </button>
-                       
-                    </>
-                ) : (
-                    <div>
-                        <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                            <button onClick={nextQuestion} id="nextQuestion" style={{ width: "45%", backgroundColor: "white", height: 40, borderRadius: 20, marginTop: 30, textAlign: "center" }}>
-                                Next Question
-                            </button>
-
-                        </div>
-                    </div>
-                )} */}
 
                 {currentQuestion + 1} OF {length} Question
                 <div style={{ display: "flex", justifyContent: "space-around", marginTop: 20 }}>
@@ -580,7 +553,6 @@ function Cs2(props) {
                             </div>
 
                         )
-                        { console.log(currentQuestion + 1) }
                     })}
                 </div>
             </div>

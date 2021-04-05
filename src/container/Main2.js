@@ -8,22 +8,25 @@ function Main2() {
     const [data, setdata] = useState([])
     const [quizes, setQuizes] = useState([])
     const [loading, setLoading] = useState(true)
-    const [insitute, setinsitute] = useState("BMJ")
+    const [insitute, setinsitute] = useState("ADAMJEE")
+    const [Topic, setTopic] = useState("GraphicDesigning")
     const [condition] = useState("")
 
+
+    
     useEffect(async () => {
 
         console.log(insitute)
 
-        let data = await firebase.database().ref(`Jawaan_Pakistan/${insitute}/Web&Mobile`)
+        let data = await firebase.database().ref(`Jawaan_Pakistan/${insitute}/${Topic}`)
         data.once("value", datasnap => {
             console.log(Object.keys(datasnap.val()))
-            console.log("here")//yaha tk chal rha is sy agy koi state set nai ho rhi
+            console.log("here")
             setdata(Object.keys(datasnap.val()))
             console.log("here1")
             setQuizes(datasnap.val())
             console.log("here2")
-            setLoading(false)//just ye wali state set ho rhi beeck ka miss ho rha
+            setLoading(false)
             console.log("chal rha")
         })
 
@@ -31,8 +34,9 @@ function Main2() {
 
 
 
+
     const handleQuizStatus = (name, status) => {
-        firebase.database().ref(`Jawaan_Pakistan/${insitute}//Web&Mobile/${name}/Visible`).set(status)
+        firebase.database().ref(`Jawaan_Pakistan/${insitute}/${Topic}/${name}/Visible`).set(status)
             // firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${name}/Visible`).set(status)
             .then(() => alert("Quiz Status Changed"))
             .catch(error => alert(error.message))
@@ -68,8 +72,6 @@ function Main2() {
                         </select>
 
                     </div>
-
-
 
                 })}
 
