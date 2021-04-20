@@ -138,9 +138,7 @@ function Admin() {
         }
         
 
-        // firebase.database().ref(`All Quiz/${course}/Questions`).push(data)
         
-        // firebase.database().ref(`Jawaan_Pakistan/${insitute}/All Quiz/${Topic}/Questions`).push(data)
         firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${Topic}/Questions`).push(fulldata)
         firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${course}/${Topic}/Questions`).push(fulldata)
     

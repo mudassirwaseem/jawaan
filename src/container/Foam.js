@@ -74,9 +74,10 @@ import firebase from "../config/Firebase"
 import * as yup from 'yup';
 
 
+
 const reviewSchema = yup.object({
     city: yup.string().required('City is Required').min(4),
-    Number: yup.string().matches(/^[0-9]{11}$/, 'Must be exactly 11 digits'),
+    Number: yup.string().matches(/^[0-9]{10}$/, 'Must be exactly 11 digits'),
     address: yup.string().required('Address is Required').min(4).max(42),
 })
 
@@ -100,7 +101,7 @@ function Foam() {
             }
         })
 
-    })
+    },[])
 
 
     
@@ -125,6 +126,7 @@ function Foam() {
                     history.replace("/Quiz2")
                     console.log(values)
                 }}
+
             >
                 {(props) => (
                     <div style={{ textAlign: "center" }}>

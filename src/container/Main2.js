@@ -36,7 +36,7 @@ function Main2() {
 
 
     const handleQuizStatus = (name, status) => {
-        firebase.database().ref(`Jawaan_Pakistan/${insitute}/${Topic}/${name}/Visible`).set(status)
+        firebase.database().ref(`Jawaan_Pakistan/${insitute}/GraphicDesigning/${name}/Visible`).set(status)
             // firebase.database().ref(`Jawaan_Pakistan/AllQuizs/${name}/Visible`).set(status)
             .then(() => alert("Quiz Status Changed"))
             .catch(error => alert(error.message))

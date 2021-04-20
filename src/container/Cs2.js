@@ -275,7 +275,6 @@ function Cs2(props) {
     const [UserId, setUserId] = useState("");
     const [Course, setCourse] = useState("");
     const [Insitute, setInsitute] = useState("")
-
     let [score, setScore] = useState(0);
     const [timer, setTimer] = useState({    
         min: 4,
@@ -284,33 +283,34 @@ function Cs2(props) {
 
 
     let length = data1.length
-
-    // let kanga = data1
     
+    
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      console.log("shufffleee",randomIndex)
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return data1;
+  }
 
-    function shuffle(data1) {
-        var currentIndex = data1.length, temporaryValue, randomIndex;
-      
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-      
-          // Pick a remaining element...
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex -= 1;
-      
-          // And swap it with the current element.
-          temporaryValue = data1[currentIndex];
-          data1[currentIndex] = data1[randomIndex];
-          data1[randomIndex] = temporaryValue;
-        }
-      
-        return data1;
-      }
-
+  var data = data1;
 
 
     
     useEffect(async () => {
+        
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -321,7 +321,7 @@ function Cs2(props) {
                 setUsername(user)
                 // console.log(uid)
                 console.log(user)
-
+                
                 firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
                     .on("value", datasnap => {
                         console.log(datasnap.val())
@@ -336,8 +336,9 @@ function Cs2(props) {
 
                                 firebase.database().ref(`Jawaan_Pakistan/${insitute}/${course}/${language}/Questions`)
                                     .on("value", datasnap => { 
-
-                                         setdata1(Object.values(datasnap.val()))
+                                        //  console.log(Object.values(datasnap.val()))
+                                        setdata1(Object.values(datasnap.val()))
+                                        //  shuffle( setdata1(Object.values(datasnap.val())))
 
                                         console.log("Quiz data", Object.values(datasnap.val()))
                      
@@ -354,6 +355,7 @@ function Cs2(props) {
 
 
         click()
+
 
     }, [])
 
@@ -390,9 +392,8 @@ function Cs2(props) {
                 console.log(data1[currentQuestion].Question)
                 console.log(data1[currentQuestion].Answer)
                 console.log(optionChosen)
-
                 setScore(++score);
-                
+ 
                 console.log("right")
 
                 setCurrentQuestion(currentQuestion + 1);
@@ -412,7 +413,7 @@ function Cs2(props) {
                 // firebase.database().ref(`UserData1/UserId/${language}`).child("Wrong Answer").push(data)
                 firebase.database().ref(`Jawaan_Pakistan/Users/${UserId}/AllData/${Insitute}/${Course}/${language}/Wrong Answer`).push(data)
                 setCurrentQuestion(currentQuestion + 1);
-                setOptionChosen("");
+                 setOptionChosen("");
             }
         } else {
             alert("choose the option")
@@ -436,7 +437,6 @@ function Cs2(props) {
             else if (data1[currentQuestion].Answer !== optionChosen) {
                 setScore(score);
                 
-
                 let data = {
                     Question: data1[currentQuestion].Question,
                     CrAnswer: data1[currentQuestion].Answer,
@@ -513,7 +513,7 @@ function Cs2(props) {
              {data1[currentQuestion].Options.map((Option, index) => {
                 return <div key={index}>
 
-                    <button  style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }} onClick={() => { chooseOption(Option) }}>  {Option}</button> <br />
+                    <button className="aoo" style={{ border: "none", width: "100%", backgroundColor: "black", marginTop: 10, color: "white" }} onClick={() => { chooseOption(Option) }}>  {Option}</button> <br />
 
                 </div>
 

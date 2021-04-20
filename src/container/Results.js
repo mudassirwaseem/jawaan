@@ -8,6 +8,9 @@ function Results(props) {
     const [Picture, setPicture] = useState("");
     const [Loading, setloading] = useState(true)
     const [Course, setCourse] = useState("");
+    // const [Grade, setGrade] = useState("");
+    // console.log(Grade)
+
 
 
     const [customClassName, setCustomClassName] = useState(false);
@@ -24,23 +27,41 @@ function Results(props) {
 
     const resultsData = JSON.parse(localStorage.getItem("results"))
 
+    const Percentage = Math.floor(resultsData.score / resultsData.length * 100)
 
-   
-    let gradeCal =  resultsData.score >= 70 ? resultsData.grade = "A" : resultsData.score >= 60 ? resultsData.grade = "B" : resultsData.score >= 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""
-   
-    let AllData ={
-        
-    Name : resultsData.Username,
-    CorrectAnswer : resultsData.score,
-    QuestionLength: resultsData.length,
-    Percentage : Math.floor(resultsData.score / resultsData.length * 100),
-    Grade : gradeCal,
-    UId: resultsData.UserId,
-    Course : resultsData.language
+    console.log(Percentage)
 
-   }
+    let grade;
+    if (Percentage >= 90) {
+        grade = "A+"
+    }
+     else if (Percentage >= 80) {
+        grade = "A"
+    } else if (Percentage >= 70) {
+        grade = "B"
+    } else if (Percentage >= 60) {
+        grade = "C"
+    } else {
+        grade = "Fail"
+    }
 
-   console.log(AllData)
+    console.log(grade)
+
+    // let val =  Percentage >= 70 ? setGrade("A") : Percentage >= 60 ? setGrade("B") : Percentage >= 50 ? setGrade("C"):Percentage < 50 ? setGrade("Fail") : ""
+    // let gradeCal =  Percentage >= 70 ? setGrade("A") : Percentage >= 60 ? setGrade("B") : Percentage >= 50 ? setGrade("C"):Percentage < 50 ? setGrade("Fail") : ""
+    let AllData = {
+
+        Name: resultsData.Username,
+        CorrectAnswer: resultsData.score,
+        QuestionLength: resultsData.length,
+        Percentage,
+        Grade : grade,
+        UId: resultsData.UserId,
+        Course: resultsData.language
+
+    }
+
+    console.log(AllData)
 
 
     useEffect(() => {
@@ -51,7 +72,7 @@ function Results(props) {
                 var uid = user.uid;
                 //   setUserId(uid)
                 console.log(uid)
-                
+
 
                 let data3 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Insitute`)
                 data3.on("value", datasnap => {
@@ -60,22 +81,23 @@ function Results(props) {
 
 
                     firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/OtherDetail/Course`)
-                    .on("value", datasnap => {
-                        // console.log(datasnap.val())
-                        setCourse(datasnap.val())
-                        let course = (datasnap.val())
-                        console.log(course)
+                        .on("value", datasnap => {
+                            // console.log(datasnap.val())
+                            setCourse(datasnap.val())
+                            let course = (datasnap.val())
+                            console.log(course)
 
-                        let data = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/${Insitute}/${course}/${resultsData.language}/Wrong Answer`)
-                    data.on("value", datasnap => {
-                        console.log(datasnap.val())
-                        setdata(Object.values(datasnap.val()))
-                        setloading(false)
-                        firebase.database().ref(`Jawaan_Pakistan/Results/${Insitute}/${course}/${resultsData.language}/${uid}`).set(AllData)
+                            let data = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/${Insitute}/${course}/${resultsData.language}/Wrong Answer`)
+                            data.on("value", datasnap => {
+                                console.log(datasnap.val())
+                                setdata(Object.values(datasnap.val()))
+                                setloading(false)
+                                firebase.database().ref(`Jawaan_Pakistan/Results/${Insitute}/${course}/${resultsData.language}/${uid}`).set(AllData)
+                                firebase.database().ref(`Jawaan_Pakistan/AllUserResults/${uid}/${Insitute}/${course}/${resultsData.language}`).set(AllData)
 
-                    })
-                    })
-            
+                            })
+                        })
+
                 })
 
                 let data2 = firebase.database().ref(`Jawaan_Pakistan/Users/${uid}/AllData/Profile/profile`)
@@ -99,7 +121,7 @@ function Results(props) {
 
     return (
         <div className="App">
-            
+
             <div style={{ border: "2px solid", width: "60%", textAlign: "center", margin: "auto", marginBottom: 20 }}>
                 <img style={{ borderRadius: "50%" }} src={Picture} alt="" />
                 <h1>Name : {resultsData.Username}</h1>
@@ -108,7 +130,7 @@ function Results(props) {
                 <h2>Percentage : {Math.floor(resultsData.score / resultsData.length * 100)} %</h2>
 
 
-                <h2> Grade : {resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""}</h2>
+                <h2> Grade :{grade}</h2>
             </div>
 
             {/* modal */}

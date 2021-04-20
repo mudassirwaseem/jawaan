@@ -8,6 +8,7 @@ function Results2(props) {
     const [Picture, setPicture] = useState("");
     const [Loading, setloading] = useState(true)
     const [Course, setCourse] = useState("");
+    const [Grade, setGrade] = useState("Pass");
 
 
     const [customClassName, setCustomClassName] = useState(false);
@@ -26,14 +27,14 @@ function Results2(props) {
 
 
    
-    let gradeCal =  resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""
-   
+    let gradeCal =  resultsData.score  <  70 ? setGrade("Pass") : setGrade("Fail")   
+
     let AllData ={
     Name : resultsData.Username,
     CorrectAnswer : resultsData.score,
     QuestionLength: resultsData.length,
     Percentage : Math.floor(resultsData.score / resultsData.length * 100),
-    Grade : gradeCal,
+    // Grade : gradeCal,
     UId: resultsData.UserId
    }
 
@@ -125,7 +126,7 @@ function Results2(props) {
                 <h2>Percentage : {Math.floor(resultsData.score1 / resultsData.length * 100)} %</h2>
 
 
-                <h2> Grade : {resultsData.score === 70 ? resultsData.grade = "A" : resultsData.score === 60 ? resultsData.grade = "B" : resultsData.score === 50 ? resultsData.grade = "C" : resultsData.score < 50 ? resultsData.grade = "FAIL" : ""}</h2>
+                <h2> Grade : {Grade}</h2>
             </div>
 
             {/* modal */}
