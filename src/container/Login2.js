@@ -24,6 +24,7 @@ function Login2() {
                     profile: user.photoURL,
                     uid: user.uid,
                 }
+                
                 console.log(create_user)
 
                 firebase.database().ref(`Jawaan_Pakistan/Users/${userid}/AllData/Profile`).set(create_user)

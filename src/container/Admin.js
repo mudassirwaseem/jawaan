@@ -19,10 +19,6 @@ function Admin() {
 
     const Savedata = () => {
 
-        // let data = [{ Question: question }, { Options: [option1, option2, option3, option4] }, { Answer: answer, }]
-
-        // const [{ Question, Options, Answer }] = data;
-
         let data = [option1,option2 ,option3,option4]
 
         let arr = []

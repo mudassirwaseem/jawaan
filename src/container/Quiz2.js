@@ -90,6 +90,7 @@ function Quiz2() {
 <div style={{position:"absolute",top:20,right:20}}>
 
              <Link to="/MyQuizes">  <button > My Quizes </button></Link>
+             <Link to="/Attendence">  <button > Attendence </button></Link>
 </div>
                 
               

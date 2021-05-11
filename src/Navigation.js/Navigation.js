@@ -17,6 +17,9 @@ import Login2 from "../container/Login2"
 import Final from "../container/Finalresults"
 import Results2 from "../container/Results2"
 import Button from "../container/Button"
+import Attendence from "../container/Attendence"
+import maincontainer from "../container/maincontainer"
+import Dashboard from "../container/Dashboard"
 
 import {
     BrowserRouter as Router,
@@ -47,6 +50,9 @@ function Navigation() {
           <Route exact path='/Button' component={Button}/>
           <Route exact path='/Final' component={Final}/>
           <Route exact path='/Results2' component={Results2}/>
+          <Route exact path='/Attendence' component={Attendence}/>
+          <Route exact path='/maincontainer' component={maincontainer}/>
+          <Route exact path='/Dashboard' component={Dashboard}/>
           {/* <Route exact path='/' component={SetData} />
           <Route exact path='/data' component={Select} /> */}
       
